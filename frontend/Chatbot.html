@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Chatbot</title>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            margin: 0;
+        }
+        
+        header {
+            background: #7e22ce;
+            color: white;
+            padding: 1rem;
+            text-align: center;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        select {
+            padding: 0.3rem 0.5rem;
+            border-radius: 5px;
+            border: none;
+            font-weight: bold;
+        }
+        
+        main {
+            flex: 1;
+            padding: 1rem;
+            overflow-y: auto;
+            background: #f3f4f6;
+        }
+        
+        footer {
+            display: flex;
+            padding: 1rem;
+            background: #f3f4f6;
+        }
+        
+        input {
+            flex: 1;
+            padding: 0.8rem;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+        }
+        
+        button {
+            margin-left: 1rem;
+            padding: 0.8rem;
+            border: none;
+            background: #7e22ce;
+            color: white;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+        
+        p {
+            margin: 0.5rem 0;
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <span id="headerTitle">🤖 Gemini AI Assistant</span>
+        <select id="langSelect">
+            <option value="en">EN</option>
+            <option value="hi">HI</option>
+            <option value="kn">KN</option>
+        </select>
+    </header>
+
+    <main id="chatWindow">
+        <p><b id="aiLabel">AI:</b> <span id="greeting">Hello! Ask me anything about artworks.</span></p>
+    </main>
+
+    <footer>
+        <input type="text" id="userInput" placeholder="Type your message...">
+        <button onclick="sendMessage()" id="sendBtn">Send</button>
+    </footer>
+
+    <script>
+        // ----------- TOKEN CHECK -----------
+        const token = localStorage.getItem('token');
+        if (!token) {
+            window.location.href = 'CustomerLogin.html';
+        }
+
+        const langSelect = document.getElementById('langSelect');
+        const headerTitle = document.getElementById('headerTitle');
+        const aiLabel = document.getElementById('aiLabel');
+        const greeting = document.getElementById('greeting');
+        const sendBtn = document.getElementById('sendBtn');
+        const userInput = document.getElementById('userInput');
+
+        const translations = {
+            en: {
+                headerTitle: "🤖 Gemini AI Assistant",
+                aiLabel: "AI:",
+                greeting: "Hello! Ask me anything about artworks.",
+                sendBtn: "Send",
+                placeholder: "Type your message..."
+            },
+            hi: {
+                headerTitle: "🤖 जेमिनी AI सहायक",
+                aiLabel: "AI:",
+                greeting: "नमस्ते! कलाकृतियों के बारे में मुझसे कुछ भी पूछें।",
+                sendBtn: "भेजें",
+                placeholder: "अपना संदेश लिखें..."
+            },
+            kn: {
+                headerTitle: "🤖 ಜೆಮಿನಿ AI ಸಹಾಯಕ",
+                aiLabel: "AI:",
+                greeting: "ನಮಸ್ಕಾರ! ಕಲಾಕೃತಿಗಳ ಬಗ್ಗೆ ಏನಾದರೂ ಕೇಳಿ.",
+                sendBtn: "ಕಳುಹಿಸಿ",
+                placeholder: "ನಿಮ್ಮ ಸಂದೇಶವನ್ನು ಟೈಪ್ ಮಾಡಿ..."
+            }
+        };
+
+        function updateLanguage(lang) {
+            const t = translations[lang];
+            headerTitle.textContent = t.headerTitle;
+            aiLabel.textContent = t.aiLabel;
+            greeting.textContent = t.greeting;
+            sendBtn.textContent = t.sendBtn;
+            userInput.placeholder = t.placeholder;
+        }
+
+        langSelect.addEventListener('change', () => updateLanguage(langSelect.value));
+        updateLanguage('en'); // default
+
+        function sendMessage() {
+            const chat = document.getElementById("chatWindow");
+            const text = userInput.value.trim();
+            if (text !== "") {
+                // User message
+                const userMsg = document.createElement('p');
+                userMsg.innerHTML = `<b>You:</b> ${text}`;
+                chat.appendChild(userMsg);
+
+                // AI response (placeholder)
+                const aiMsg = document.createElement('p');
+                aiMsg.innerHTML = `<b>${aiLabel.textContent}</b> This is a placeholder response for "${text}"`;
+                chat.appendChild(aiMsg);
+
+                userInput.value = "";
+                chat.scrollTop = chat.scrollHeight;
+            }
+        }
+    </script>
+
+</body>
+
+</html>

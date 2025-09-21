@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            background: linear-gradient(to right, #f3e8ff, #fee2e2, #fef9c3);
+        }
+        
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #7e22ce;
+            color: white;
+            padding: 1rem 2rem;
+        }
+        
+        select {
+            padding: 0.3rem 0.5rem;
+            border-radius: 5px;
+            border: none;
+            font-weight: bold;
+        }
+        
+        main {
+            padding: 2rem;
+            max-width: 1200px;
+            margin: auto;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 1rem;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+        
+        th,
+        td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        th {
+            background: #7e22ce;
+            color: white;
+        }
+        
+        button {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+        
+        .approve {
+            background: #22c55e;
+            color: white;
+        }
+        
+        .approve:hover {
+            background: #16a34a;
+        }
+        
+        .reject {
+            background: #ef4444;
+            color: white;
+        }
+        
+        .reject:hover {
+            background: #b91c1c;
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <h1 id="heading">🎨 Admin Dashboard</h1>
+        <select id="langSelect"><option value="en">EN</option><option value="hi">HI</option><option value="kn">KN</option></select>
+    </header>
+
+    <main>
+        <h2 id="pendingTitle">Pending Seller Verifications</h2>
+        <table id="verificationTable">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th id="nameHeader">Name</th>
+                    <th id="phoneHeader">Phone</th>
+                    <th id="emailHeader">Email</th>
+                    <th id="fileHeader">Verification File</th>
+                    <th id="actionHeader">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>1</td>
+                    <td>John Doe</td>
+                    <td>+1234567890</td>
+                    <td>john@example.com</td>
+                    <td>verification1.pdf</td>
+                    <td><button class="approve">Approve</button><button class="reject">Reject</button></td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td>Jane Smith</td>
+                    <td>+9876543210</td>
+                    <td>jane@example.com</td>
+                    <td>verification2.jpg</td>
+                    <td><button class="approve">Approve</button><button class="reject">Reject</button></td>
+                </tr>
+            </tbody>
+        </table>
+    </main>
+
+    <script>
+        const token = localStorage.getItem('token');
+        if (!token) {
+            window.location.href = "AdminLogin.html";
+        }
+
+        const langSelect = document.getElementById('langSelect');
+
+        const translations = {
+            en: {
+                heading: "🎨 Admin Dashboard",
+                pendingTitle: "Pending Seller Verifications",
+                nameHeader: "Name",
+                phoneHeader: "Phone",
+                emailHeader: "Email",
+                fileHeader: "Verification File",
+                actionHeader: "Action",
+                approve: "Approve",
+                reject: "Reject"
+            },
+            hi: {
+                heading: "🎨 प्रशासक डैशबोर्ड",
+                pendingTitle: "विक्रेता सत्यापन लंबित",
+                nameHeader: "नाम",
+                phoneHeader: "फोन",
+                emailHeader: "ईमेल",
+                fileHeader: "सत्यापन फ़ाइल",
+                actionHeader: "कार्रवाई",
+                approve: "स्वीकृत करें",
+                reject: "अस्वीकृत करें"
+            },
+            kn: {
+                heading: "🎨 ಆಡಳಿತಗಾರ ಡ್ಯಾಶ್‌ಬೋರ್ಡ್",
+                pendingTitle: "ಮಾರಾಟಗಾರರ ಪರಿಶೀಲನೆ ಬಾಕಿ ಇದೆ",
+                nameHeader: "ಹೆಸರು",
+                phoneHeader: "ದೂರವಾಣಿ",
+                emailHeader: "ಇಮೇಲ್",
+                fileHeader: "ಪರಿಶೀಲನಾ ಫೈಲ್",
+                actionHeader: "ಕ್ರಮ",
+                approve: "ಅನুমೋದಿಸಿ",
+                reject: "ರದ್ದುಮಾಡಿ"
+            }
+        };
+
+        langSelect.addEventListener('change', () => {
+            const t = translations[langSelect.value];
+            document.getElementById('heading').textContent = t.heading;
+            document.getElementById('pendingTitle').textContent = t.pendingTitle;
+            document.getElementById('nameHeader').textContent = t.nameHeader;
+            document.getElementById('phoneHeader').textContent = t.phoneHeader;
+            document.getElementById('emailHeader').textContent = t.emailHeader;
+            document.getElementById('fileHeader').textContent = t.fileHeader;
+            document.getElementById('actionHeader').textContent = t.actionHeader;
+
+            document.querySelectorAll('.approve').forEach(btn => btn.textContent = t.approve);
+            document.querySelectorAll('.reject').forEach(btn => btn.textContent = t.reject);
+        });
+
+        // Approve/Reject placeholders
+        document.querySelectorAll('.approve').forEach(btn => btn.addEventListener('click', () => {
+            alert("Seller approved!");
+            btn.closest('tr').remove();
+        }));
+        document.querySelectorAll('.reject').forEach(btn => btn.addEventListener('click', () => {
+            alert("Seller rejected!");
+            btn.closest('tr').remove();
+        }));
+
+        langSelect.value = 'en';
+        langSelect.dispatchEvent(new Event('change'));
+    </script>
+</body>
+
+</html>
