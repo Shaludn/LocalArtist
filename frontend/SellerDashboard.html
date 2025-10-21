@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seller Dashboard</title>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            background: linear-gradient(to right, #f3e8ff, #fee2e2, #fef9c3);
+        }
+        
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #7e22ce;
+            color: white;
+            padding: 1rem 2rem;
+        }
+        
+        select,
+        button {
+            padding: 0.3rem 0.5rem;
+            border-radius: 5px;
+            border: none;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        
+        main {
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            max-width: 1200px;
+            margin: auto;
+        }
+        
+        .controls {
+            display: flex;
+            justify-content: flex-end;
+            gap: 1rem;
+        }
+        
+        .artworks {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            justify-content: center;
+        }
+        
+        .art {
+            width: 250px;
+            background: white;
+            border-radius: 1rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            padding: 1rem;
+            text-align: center;
+        }
+        
+        .chatbot {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #7e22ce;
+            color: white;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 2rem;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <h1 id="heading">🎨 Seller Dashboard</h1>
+        <div class="controls">
+            <select id="langSelect"><option value="en">EN</option><option value="hi">HI</option><option value="kn">KN</option></select>
+            <button id="uploadArtBtn">Upload Artwork</button>
+        </div>
+    </header>
+
+    <main>
+        <div class="controls">
+            <label for="sortSelect">Sort:</label>
+            <select id="sortSelect"><option value="latest">Latest</option><option value="priceLow">Price Low to High</option><option value="priceHigh">Price High to Low</option></select>
+
+            <label for="filterSelect">Filter:</label>
+            <select id="filterSelect"><option value="all">All</option><option value="handcrafts">Handcrafts</option><option value="paintings">Paintings</option><option value="sarees">Sarees</option></select>
+        </div>
+
+        <div class="artworks" id="artworksContainer"></div>
+    </main>
+
+    <div class="chatbot" id="chatbotBtn">🤖</div>
+
+    <script>
+        const token = localStorage.getItem('token');
+        if (!token) {
+            window.location.href = "SellerLogin.html";
+        } // redirect if token missing
+
+        const langSelect = document.getElementById('langSelect');
+        const heading = document.getElementById('heading');
+        const uploadArtBtn = document.getElementById('uploadArtBtn');
+        const chatbotBtn = document.getElementById('chatbotBtn');
+
+        const translations = {
+            en: {
+                heading: "🎨 Seller Dashboard",
+                uploadArt: "Upload Artwork"
+            },
+            hi: {
+                heading: "🎨 विक्रेता डैशबोर्ड",
+                uploadArt: "कलाकृति अपलोड करें"
+            },
+            kn: {
+                heading: "🎨 ಮಾರಾಟಗಾರ ಡ್ಯಾಶ್‌ಬೋರ್ಡ್",
+                uploadArt: "ಕಲಾಕೃತಿ ಅಪ್ಲೋಡ್ ಮಾಡಿ"
+            }
+        };
+
+        langSelect.addEventListener('change', () => {
+            const t = translations[langSelect.value];
+            heading.textContent = t.heading;
+            uploadArtBtn.textContent = t.uploadArt;
+        });
+
+        uploadArtBtn.addEventListener('click', () => {
+            window.location.href = "UploadArtwork.html";
+        });
+        chatbotBtn.addEventListener('click', () => {
+            window.location.href = "Chatbot.html";
+        });
+    </script>
+</body>
+
+</html>

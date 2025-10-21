@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload Artwork</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #ede9fe, #ddd6fe);
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+        
+        header {
+            width: 100%;
+            padding: 1rem 2rem;
+            background: #7e22ce;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        main {
+            margin-top: 2rem;
+            width: 100%;
+            max-width: 700px;
+            background: white;
+            padding: 2rem;
+            border-radius: 1rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+        
+        input,
+        textarea,
+        button {
+            width: 100%;
+            padding: 0.8rem;
+            margin-top: 0.5rem;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            font-size: 1rem;
+        }
+        
+        textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+        
+        .row {
+            display: flex;
+            gap: 1rem;
+            margin-top: 0.5rem;
+        }
+        
+        button {
+            background: #7e22ce;
+            color: white;
+            font-weight: bold;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        button:hover {
+            background: #9d4edd;
+        }
+        
+        .actions {
+            margin-top: 2rem;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <h1>🎨 Local Artists</h1>
+        <select id="langSelect"><option value="en">English</option><option value="hi">हिन्दी</option><option value="kn">ಕನ್ನಡ</option></select>
+    </header>
+
+    <main>
+        <h2 id="formTitle">Upload Artwork</h2>
+
+        <form id="uploadForm">
+            <label id="artFileLabel" for="artFile">Upload your artwork</label>
+            <input type="file" id="artFile" accept=".jpg,.jpeg,.png" required>
+
+            <label id="titleLabel" for="title">Artwork Title</label>
+            <input type="text" id="title" placeholder="Enter title" required>
+
+            <label id="descLabel" for="description">Description (optional)</label>
+            <textarea id="description" placeholder="Enter description"></textarea>
+            <button type="button" id="genAI">✨ Generate with AI</button>
+
+            <label id="priceLabel" for="price">Price</label>
+            <div class="row">
+                <input type="number" id="price" placeholder="Enter price manually">
+                <button type="button" id="priceAI">💰 Get Suggestion</button>
+            </div>
+
+            <div class="actions">
+                <button type="submit" id="uploadBtn">Upload</button>
+            </div>
+        </form>
+    </main>
+
+    <script>
+        const token = localStorage.getItem('token');
+        if (!token) {
+            window.location.href = "SellerLogin.html";
+        }
+
+        const langSelect = document.getElementById('langSelect');
+        const desc = document.getElementById('description');
+        const price = document.getElementById('price');
+
+        const translations = {
+            en: {
+                formTitle: "Upload Artwork",
+                artFileLabel: "Upload your artwork",
+                titleLabel: "Artwork Title",
+                descLabel: "Description (optional)",
+                genAI: "✨ Generate with AI",
+                priceLabel: "Price",
+                priceAI: "💰 Get Suggestion",
+                uploadBtn: "Upload",
+                successMsg: "Artwork uploaded successfully!"
+            },
+            hi: {
+                formTitle: "कलाकृति अपलोड करें",
+                artFileLabel: "अपनी कलाकृति अपलोड करें",
+                titleLabel: "कलाकृति शीर्षक",
+                descLabel: "विवरण (वैकल्पिक)",
+                genAI: "✨ AI से जनरेट करें",
+                priceLabel: "मूल्य",
+                priceAI: "💰 सुझाव प्राप्त करें",
+                uploadBtn: "अपलोड करें",
+                successMsg: "कलाकृति सफलतापूर्वक अपलोड हो गई!"
+            },
+            kn: {
+                formTitle: "ಕಲಾಕೃತಿ ಅಪ್ಲೋಡ್ ಮಾಡಿ",
+                artFileLabel: "ನಿಮ್ಮ ಕಲಾಕೃತಿಯನ್ನು ಅಪ್ಲೋಡ್ ಮಾಡಿ",
+                titleLabel: "ಕಲಾಕೃತಿ ಶೀರ್ಷಿಕೆ",
+                descLabel: "ವಿವರಣೆ (ಐಚ್ಛಿಕ)",
+                genAI: "✨ AI ಮೂಲಕ ರಚಿಸಿ",
+                priceLabel: "ಬೆಲೆ",
+                priceAI: "💰 ಸಲಹೆ ಪಡೆಯಿರಿ",
+                uploadBtn: "ಅಪ್ಲೋಡ್ ಮಾಡಿ",
+                successMsg: "ಕಲಾಕೃತಿ ಯಶಸ್ವಿಯಾಗಿ ಅಪ್ಲೋಡ್ ಮಾಡಲಾಗಿದೆ!"
+            }
+        };
+
+        function updateLang(lang) {
+            const t = translations[lang];
+            document.getElementById('formTitle').textContent = t.formTitle;
+            document.getElementById('artFileLabel').textContent = t.artFileLabel;
+            document.getElementById('titleLabel').textContent = t.titleLabel;
+            document.getElementById('descLabel').textContent = t.descLabel;
+            document.getElementById('genAI').textContent = t.genAI;
+            document.getElementById('priceLabel').textContent = t.priceLabel;
+            document.getElementById('priceAI').textContent = t.priceAI;
+            document.getElementById('uploadBtn').textContent = t.uploadBtn;
+        }
+
+        document.getElementById('genAI').addEventListener('click', () => {
+            desc.value = "A beautifully handcrafted artwork that reflects creativity and passion.";
+        });
+        document.getElementById('priceAI').addEventListener('click', () => {
+            price.value = Math.floor(Math.random() * 5000) + 500;
+        });
+        document.getElementById('uploadForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            alert(translations[langSelect.value].successMsg);
+        });
+
+        langSelect.addEventListener('change', () => updateLang(langSelect.value));
+        updateLang("en");
+    </script>
+</body>
+
+</html>

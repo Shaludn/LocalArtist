@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Suggestions</title>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(to right, #fdf2f8, #ede9fe, #e0f2fe);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+        
+        header {
+            width: 100%;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            background: #7e22ce;
+            color: white;
+            align-items: center;
+        }
+        
+        header h1 {
+            font-size: 1.5rem;
+        }
+        
+        select {
+            padding: 0.3rem 0.5rem;
+            border-radius: 5px;
+            border: none;
+            font-weight: bold;
+        }
+        
+        main {
+            margin-top: 2rem;
+            width: 100%;
+            max-width: 1000px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            padding: 1rem;
+        }
+        
+        .card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 1rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            text-align: center;
+            transition: transform 0.2s;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .card h2 {
+            color: #4c1d95;
+            margin-bottom: 0.8rem;
+        }
+        
+        .card p {
+            color: #333;
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <h1 id="pageTitle">✨ AI Suggestions</h1>
+        <select id="langSelect">
+            <option value="en">English</option>
+            <option value="hi">हिन्दी</option>
+            <option value="kn">ಕನ್ನಡ</option>
+        </select>
+    </header>
+
+    <main>
+        <div class="card">
+            <h2 id="sariTitle">Saree Designs</h2>
+            <p id="sariDesc">Trending handloom sarees with fusion patterns.</p>
+        </div>
+        <div class="card">
+            <h2 id="potteryTitle">Pottery</h2>
+            <p id="potteryDesc">Rustic pottery with modern glaze combinations.</p>
+        </div>
+        <div class="card">
+            <h2 id="handicraftTitle">Handicrafts</h2>
+            <p id="handicraftDesc">Intricate wood and metal handicraft ideas.</p>
+        </div>
+        <div class="card">
+            <h2 id="paintingTitle">Paintings</h2>
+            <p id="paintingDesc">AI-inspired fusion of folk and abstract art.</p>
+        </div>
+    </main>
+
+    <script>
+        // ---------- TOKEN CHECK ----------
+        const token = localStorage.getItem('token');
+        if (!token) {
+            window.location.href = 'SellerAuthentication.html'; // redirect if not logged in
+        }
+
+        const langSelect = document.getElementById("langSelect");
+
+        const translations = {
+            en: {
+                pageTitle: "✨ AI Suggestions",
+                sariTitle: "Saree Designs",
+                sariDesc: "Trending handloom sarees with fusion patterns.",
+                potteryTitle: "Pottery",
+                potteryDesc: "Rustic pottery with modern glaze combinations.",
+                handicraftTitle: "Handicrafts",
+                handicraftDesc: "Intricate wood and metal handicraft ideas.",
+                paintingTitle: "Paintings",
+                paintingDesc: "AI-inspired fusion of folk and abstract art."
+            },
+            hi: {
+                pageTitle: "✨ एआई सुझाव",
+                sariTitle: "साड़ी डिज़ाइन",
+                sariDesc: "ट्रेंडिंग हैंडलूम साड़ियाँ आधुनिक पैटर्न्स के साथ।",
+                potteryTitle: "मिट्टी के बर्तन",
+                potteryDesc: "ग्रामीण मिट्टी के बर्तन आधुनिक चमक के साथ।",
+                handicraftTitle: "हस्तशिल्प",
+                handicraftDesc: "लकड़ी और धातु के बारीक हस्तशिल्प विचार।",
+                paintingTitle: "चित्रकला",
+                paintingDesc: "एआई-प्रेरित लोक और अमूर्त कला का मिश्रण।"
+            },
+            kn: {
+                pageTitle: "✨ AI ಸಲಹೆಗಳು",
+                sariTitle: "ಸೀರೆ ವಿನ್ಯಾಸಗಳು",
+                sariDesc: "ಟ್ರೆಂಡಿಂಗ್ ಹ್ಯಾಂಡ್‍ಲೂಮ್ ಸೀರೆಗಳು ಆಧುನಿಕ ಮಾದರಿಗಳೊಂದಿಗೆ.",
+                potteryTitle: "ಮಣ್ಣಿನ ಪಾತ್ರೆಗಳು",
+                potteryDesc: "ಆಧುನಿಕ ಗ್ಲೇಜ್ ಸಂಯೋಜನೆಯೊಂದಿಗೆ ಗ್ರಾಮೀಣ ಮಣ್ಣಿನ ಪಾತ್ರೆಗಳು.",
+                handicraftTitle: "ಹಸ್ತಕಲೆ",
+                handicraftDesc: "ಮರ ಮತ್ತು ಲೋಹದ ಸೂಕ್ಷ್ಮ ಹಸ್ತಕಲೆ ಕಲ್ಪನೆಗಳು.",
+                paintingTitle: "ಚಿತ್ರಗಳು",
+                paintingDesc: "ಜನಪದ ಮತ್ತು ಅಮೂರ್ತ ಕಲೆಯ AI ಪ್ರೇರಿತ ಸಂಯೋಜನೆ."
+            }
+        };
+
+        function updateLang(lang) {
+            const t = translations[lang];
+            document.getElementById("pageTitle").textContent = t.pageTitle;
+            document.getElementById("sariTitle").textContent = t.sariTitle;
+            document.getElementById("sariDesc").textContent = t.sariDesc;
+            document.getElementById("potteryTitle").textContent = t.potteryTitle;
+            document.getElementById("potteryDesc").textContent = t.potteryDesc;
+            document.getElementById("handicraftTitle").textContent = t.handicraftTitle;
+            document.getElementById("handicraftDesc").textContent = t.handicraftDesc;
+            document.getElementById("paintingTitle").textContent = t.paintingTitle;
+            document.getElementById("paintingDesc").textContent = t.paintingDesc;
+        }
+
+        langSelect.addEventListener("change", () => updateLang(langSelect.value));
+        updateLang("en"); // default
+    </script>
+
+</body>
+
+</html>

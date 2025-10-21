@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Local Artists Marketplace</title>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            background: linear-gradient(to right, #f3e8ff, #fee2e2, #fef9c3);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        header {
+            width: 100%;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            background: #7e22ce;
+            color: white;
+            align-items: center;
+        }
+        
+        header h1 {
+            font-size: 1.8rem;
+        }
+        
+        select {
+            padding: 0.3rem 0.5rem;
+            border-radius: 5px;
+            border: none;
+            font-weight: bold;
+        }
+        
+        main {
+            width: 100%;
+            max-width: 1200px;
+            margin-top: 3rem;
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+            align-items: center;
+        }
+        
+        .hover-boards {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+        
+        .board {
+            background: white;
+            width: 250px;
+            height: 200px;
+            border-radius: 1rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+        }
+        
+        .board:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+        }
+        
+        .board h2 {
+            margin: 0;
+            color: #7e22ce;
+        }
+        
+        .board p {
+            font-size: 0.9rem;
+        }
+        
+        .board button {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 8px;
+            background: #7e22ce;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .board button:hover {
+            background: #9d4edd;
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <h1 id="heading">🎨 Local Artists Marketplace</h1>
+        <select id="langSelect">
+            <option value="en">EN</option>
+            <option value="hi">HI</option>
+            <option value="kn">KN</option>
+        </select>
+    </header>
+
+    <main>
+        <div class="hover-boards">
+            <div class="board" id="customerBoard">
+                <h2 id="customerTitle">🛍️ Customer</h2>
+                <p id="customerDesc">Browse beautiful handmade creations, chat with our AI assistant, and find the perfect art for you.</p>
+                <button id="customerBtn">Start Exploring</button>
+            </div>
+            <div class="board" id="sellerBoard">
+                <h2 id="sellerTitle">🧵 Seller</h2>
+                <p id="sellerDesc">Upload your art, get AI-powered descriptions and fair price suggestions, and connect with buyers.</p>
+                <button id="sellerBtn">Start Selling</button>
+            </div>
+            <div class="board" id="adminBoard">
+                <h2 id="adminTitle">🛠️ Admin</h2>
+                <p id="adminDesc">Verify sellers, manage artworks, and keep the marketplace running smoothly for everyone.</p>
+                <button id="adminBtn">Go Admin</button>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        const langSelect = document.getElementById('langSelect');
+
+        const translations = {
+            en: {
+                heading: "🎨 Local Artists Marketplace",
+                customerTitle: "🛍️ Customer",
+                customerDesc: "Browse beautiful handmade creations, chat with our AI assistant, and find the perfect art for you.",
+                customerBtn: "Start Exploring",
+                sellerTitle: "🧵 Seller",
+                sellerDesc: "Upload your art, get AI-powered descriptions and fair price suggestions, and connect with buyers.",
+                sellerBtn: "Start Selling",
+                adminTitle: "🛠️ Admin",
+                adminDesc: "Verify sellers, manage artworks, and keep the marketplace running smoothly for everyone.",
+                adminBtn: "Go Admin"
+            },
+            hi: {
+                heading: "🎨 स्थानीय कलाकारों का बाज़ार",
+                customerTitle: "🛍️ ग्राहक",
+                customerDesc: "सुंदर हस्तनिर्मित कृतियों को देखें, हमारे AI सहायक से चैट करें, और उपयुक्त कला खोजें।",
+                customerBtn: "अन्वेषण शुरू करें",
+                sellerTitle: "🧵 विक्रेता",
+                sellerDesc: "अपनी कला अपलोड करें, AI-निर्दिष्ट विवरण और उचित मूल्य सुझाव प्राप्त करें, और खरीदारों से जुड़ें।",
+                sellerBtn: "बिक्री शुरू करें",
+                adminTitle: "🛠️ प्रशासक",
+                adminDesc: "विक्रेताओं को सत्यापित करें, कृतियों का प्रबंधन करें, और मार्केटप्लेस को सुचारू रूप से चलाएँ।",
+                adminBtn: "जाएँ प्रशासक"
+            },
+            kn: {
+                heading: "🎨 ಸ್ಥಳೀಯ ಕಲಾವಿದರ ಮಾರುಕಟ್ಟೆ",
+                customerTitle: "🛍️ ಗ್ರಾಹಕ",
+                customerDesc: "ಅದ್ಭುತ ಕೈನಿರ್ಮಿತ ಕಲಾಕೃತಿಗಳನ್ನು ಬ್ರೌಸ್ ಮಾಡಿ, ನಮ್ಮ AI ಸಹಾಯಕರೊಂದಿಗೆ ಚಾಟ್ ಮಾಡಿ, ಮತ್ತು ಸೂಕ್ತ ಕಲೆಯನ್ನು ಹುಡುಕಿ.",
+                customerBtn: "ಅನ್ವೇಷಣೆಯನ್ನು ಪ್ರಾರಂಭಿಸಿ",
+                sellerTitle: "🧵 ಮಾರಾಟಗಾರ",
+                sellerDesc: "ನಿಮ್ಮ ಕಲೆ ಅಪ್ಲೋಡ್ ಮಾಡಿ, AI-ನಿರ್ದೇಶಿತ ವಿವರಣೆ ಮತ್ತು ನ್ಯಾಯಸಮ್ಮತ ಬೆಲೆ ಸಲಹೆಗಳನ್ನು ಪಡೆಯಿರಿ, ಮತ್ತು ಖರೀದಿದಾರರೊಂದಿಗೆ ಸಂಪರ್ಕ ಸಾಧಿಸಿ.",
+                sellerBtn: "ಮಾರಾಟ ಆರಂಭಿಸಿ",
+                adminTitle: "🛠️ ಆಡಳಿತಗಾರನು",
+                adminDesc: "ಮಾರಾಟಗಾರರನ್ನು ಪರಿಶೀಲಿಸಿ, ಕಲಾಕೃತಿಗಳನ್ನು ನಿರ್ವಹಿಸಿ, ಮತ್ತು ಮಾರುಕಟ್ಟೆಯನ್ನು ಸುಗಮವಾಗಿ ನಡೆಸಿ.",
+                adminBtn: "ಹೋದಿರಿ ಆಡಳಿತ"
+            }
+        };
+
+        function updateLanguage(lang) {
+            const t = translations[lang];
+            document.getElementById('heading').textContent = t.heading;
+            document.getElementById('customerTitle').textContent = t.customerTitle;
+            document.getElementById('customerDesc').textContent = t.customerDesc;
+            document.getElementById('customerBtn').textContent = t.customerBtn;
+            document.getElementById('sellerTitle').textContent = t.sellerTitle;
+            document.getElementById('sellerDesc').textContent = t.sellerDesc;
+            document.getElementById('sellerBtn').textContent = t.sellerBtn;
+            document.getElementById('adminTitle').textContent = t.adminTitle;
+            document.getElementById('adminDesc').textContent = t.adminDesc;
+            document.getElementById('adminBtn').textContent = t.adminBtn;
+        }
+
+        langSelect.addEventListener('change', () => {
+            updateLanguage(langSelect.value);
+        });
+
+        document.getElementById('sellerBtn').addEventListener('click', () => {
+            window.location.href = 'SellerAuth.html';
+        });
+
+        document.getElementById('customerBtn').addEventListener('click', () => {
+            window.location.href = 'CustomerDashboard.html';
+        });
+
+        document.getElementById('adminBtn').addEventListener('click', () => {
+            window.location.href = 'AdminDashboard.html';
+        });
+
+        // Set default language
+        updateLanguage('en');
+    </script>
+
+</body>
+
+</html>

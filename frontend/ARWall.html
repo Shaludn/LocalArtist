@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AR Wall Preview</title>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            background: linear-gradient(to right, #f3e8ff, #fee2e2, #fef9c3);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 2rem;
+        }
+        
+        header {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            background: #7e22ce;
+            color: white;
+            padding: 1rem 2rem;
+            align-items: center;
+        }
+        
+        select {
+            padding: 0.3rem 0.5rem;
+            border-radius: 5px;
+            border: none;
+            font-weight: bold;
+        }
+        
+        main {
+            width: 100%;
+            max-width: 600px;
+            margin-top: 2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+        
+        h2 {
+            color: #4c1d95;
+            text-align: center;
+        }
+        
+        input[type="file"] {
+            padding: 1rem;
+            border-radius: 10px;
+            border: 1px solid #ddd;
+        }
+        
+        button {
+            padding: 0.8rem;
+            border-radius: 8px;
+            border: none;
+            background: #7e22ce;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        button:hover {
+            background: #9d4edd;
+        }
+        
+        #preview {
+            width: 100%;
+            margin-top: 1rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+        
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <h1 id="heading">🎨 AR Wall Preview</h1>
+        <select id="langSelect">
+            <option value="en">EN</option>
+            <option value="hi">HI</option>
+            <option value="kn">KN</option>
+        </select>
+    </header>
+
+    <main>
+        <h2 id="instruction">Upload a picture of your room or wall</h2>
+        <input type="file" id="roomUpload" accept=".jpg,.jpeg,.png">
+        <img id="preview" src="" alt="" class="hidden">
+        <button id="aiSuggestBtn" class="hidden">Get AI Artwork Suggestions</button>
+    </main>
+
+    <script>
+        // ----------- TOKEN CHECK -----------
+        const token = localStorage.getItem('token');
+        if (!token) {
+            window.location.href = 'SellerAuthentication.html';
+        }
+
+        const langSelect = document.getElementById('langSelect');
+        const instruction = document.getElementById('instruction');
+        const roomUpload = document.getElementById('roomUpload');
+        const preview = document.getElementById('preview');
+        const aiBtn = document.getElementById('aiSuggestBtn');
+
+        const translations = {
+            en: {
+                instruction: "Upload a picture of your room or wall",
+                aiBtn: "Get AI Artwork Suggestions"
+            },
+            hi: {
+                instruction: "अपने कमरे या दीवार की तस्वीर अपलोड करें",
+                aiBtn: "AI कला सुझाव प्राप्त करें"
+            },
+            kn: {
+                instruction: "ನಿಮ್ಮ ಕೊಠಡಿ ಅಥವಾ ಗೋಡೆಯ ಚಿತ್ರವನ್ನು ಅಪ್ಲೋಡ್ ಮಾಡಿ",
+                aiBtn: "AI ಕಲಾ ಸಲಹೆಗಳು ಪಡೆಯಿರಿ"
+            }
+        };
+
+        function updateLanguage(lang) {
+            instruction.textContent = translations[lang].instruction;
+            aiBtn.textContent = translations[lang].aiBtn;
+        }
+
+        langSelect.addEventListener('change', () => {
+            updateLanguage(langSelect.value);
+        });
+
+        // Preview uploaded image
+        roomUpload.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(ev) {
+                    preview.src = ev.target.result;
+                    preview.classList.remove('hidden');
+                    aiBtn.classList.remove('hidden');
+                }
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // Placeholder for AI suggestions
+        aiBtn.addEventListener('click', () => {
+            alert("AI is suggesting artworks for your wall! (Placeholder, integrate actual AI later.)");
+        });
+
+        // Default language
+        updateLanguage('en');
+    </script>
+
+</body>
+
+</html>
